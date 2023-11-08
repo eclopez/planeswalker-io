@@ -1,5 +1,7 @@
+import Header from "@/components/Header";
+
 function Page() {
-  return <h1>Planeswalker.io</h1>;
+  return <Header />;
 }
 
 export default Page;
