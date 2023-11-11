@@ -18,13 +18,13 @@ import {
   SelectContent,
   SelectItem,
 } from "@radix-ui/themes";
-import { StartGameProps } from "app/page";
+import { GameProps } from "app/page";
 
 const NUMBER_OF_PLAYERS = [1, 2, 3, 4, 5, 6] as const;
 const DEFAULT_STARTING_LIFE: number = 40;
 
-interface NewGameProps {
-  startGame: (StartGameProps) => void;
+export interface NewGameProps {
+  startGame: (args: GameProps) => void;
 }
 
 function NewGame({ startGame }: NewGameProps) {
