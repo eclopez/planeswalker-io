@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import { Viewport } from "next";
 import { Theme, Grid } from "@radix-ui/themes";
 import Header from "@/components/Header";
 import "the-new-css-reset/css/reset.css";
@@ -8,9 +8,11 @@ interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-export const metadata: Metadata = {
-  viewport:
-    "width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0",
+export const viewport: Viewport = {
+  width: "device-width",
+  userScalable: false,
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 function RootLayout({ children }: RootLayoutProps) {
