@@ -8,7 +8,7 @@ export interface MenuProps {
 
 function Menu({ startGame }: MenuProps) {
   return (
-    <Flex align="center" justify="center">
+    <Flex align="center" justify="center" style={{ gridColumn: "1 / 3" }}>
       <Flex
         direction="column"
         gap="4"
