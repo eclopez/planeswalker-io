@@ -1,22 +1,30 @@
-import { Flex, Button } from "@radix-ui/themes";
-import NewGame from "@/components/NewGame";
+"use client";
+
+import { useState } from "react";
+import Menu from "@/components/Menu";
+import Game from "@/components/Game";
+
+export interface GameProps {
+  startingLife: number;
+  players: string[];
+}
 
 function Page() {
-  return (
-    <Flex align="center" justify="center">
-      <Flex
-        direction="column"
-        gap="4"
-        style={{ width: "180px", height: "fit-content" }}
-      >
-        <NewGame />
-        <Button size="3" disabled>
-          Continue
-        </Button>
-        <Button size="3">About</Button>
-      </Flex>
-    </Flex>
-  );
+  const [isStarted, setIsStarted] = useState<boolean>(false);
+  const [startingLife, setStartingLife] = useState<number>();
+  const [playerNames, setPlayerNames] = useState<string[]>();
+
+  const startGame = ({ startingLife, players }: GameProps) => {
+    setStartingLife(startingLife);
+    setPlayerNames(players);
+    setIsStarted(true);
+  };
+
+  if (!isStarted) {
+    return <Menu startGame={startGame} />;
+  } else {
+    return <Game startingLife={startingLife} players={playerNames} />;
+  }
 }
 
 export default Page;
