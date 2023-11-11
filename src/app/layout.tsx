@@ -22,11 +22,12 @@ function RootLayout({ children }: RootLayoutProps) {
         <Theme appearance="dark" accentColor="violet">
           <Grid
             asChild
-            columns="1"
+            columns={{ initial: "1", xs: "2" }}
             style={{
               height: "100dvh",
               gridTemplateRows: "auto",
               gridAutoRows: "1fr",
+              gridAutoColumns: "1fr",
             }}
           >
             <main>

@@ -1,0 +1,9 @@
+.header h1 {
+  height: fit-content;
+}
+
+@media screen and (min-width: 520px) {
+  .header {
+    grid-column: 1 / 3;
+  }
+}
