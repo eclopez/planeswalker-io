@@ -1,12 +1,7 @@
 import { Flex, Button } from "@radix-ui/themes";
 import NewGame from "@/components/NewGame";
-import { GameProps } from "app/page";
 
-export interface MenuProps {
-  startGame: (args: GameProps) => void;
-}
-
-function Menu({ startGame }: MenuProps) {
+function Menu() {
   return (
     <Flex align="center" justify="center" style={{ gridColumn: "1 / 3" }}>
       <Flex
@@ -14,7 +9,7 @@ function Menu({ startGame }: MenuProps) {
         gap="4"
         style={{ width: "180px", height: "fit-content" }}
       >
-        <NewGame startGame={startGame} />
+        <NewGame />
         <Button size="3" disabled>
           Continue
         </Button>

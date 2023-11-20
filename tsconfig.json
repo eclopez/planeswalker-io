@@ -15,7 +15,7 @@
     "jsx": "preserve",
     "paths": {
       "@/components/*": ["components/*"],
-      "@/hooks/*": ["hooks"],
+      "@/hooks/*": ["hooks/*"],
       "@/styles/*": ["styles/*"]
     },
     "plugins": [
