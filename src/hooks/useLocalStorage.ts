@@ -1,9 +1,14 @@
 function useLocalStorage() {
-  const initGame = (gameId, players, startingLife) => {
+  const initGame = (
+    gameId: string,
+    players: string[],
+    startingLife: number
+  ) => {
     const game = [];
 
-    players.forEach((player) => {
+    players.forEach((player: string, index: number) => {
       game.push({
+        playerId: index,
         name: player,
         life: startingLife,
       });
@@ -12,7 +17,7 @@ function useLocalStorage() {
     localStorage.setItem(gameId, JSON.stringify(game));
   };
 
-  const retrieveGame = (gameId) => {
+  const retrieveGame = (gameId: string) => {
     return JSON.parse(localStorage.getItem(gameId));
   };
 
@@ -29,17 +34,17 @@ function useLocalStorage() {
     return games.sort();
   };
 
-  const updateGame = (gameId, player, updatedLife) => {
+  const updateGame = (
+    gameId: string,
+    playerId: number,
+    updatedLife: number
+  ) => {
     let game = JSON.parse(localStorage.getItem(gameId));
-    for (let i = 0; i < game.length; i++) {
-      if (game[i].name === player) {
-        game[i].life = updatedLife;
-      }
-    }
+    game[playerId].life = updatedLife;
     localStorage.setItem(gameId, JSON.stringify(game));
   };
 
-  const removeGame = (gameId) => {
+  const removeGame = (gameId: string) => {
     localStorage.removeItem(gameId);
   };
 
