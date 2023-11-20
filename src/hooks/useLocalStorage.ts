@@ -26,7 +26,7 @@ function useLocalStorage() {
       }
     }
 
-    return games;
+    return games.sort();
   };
 
   const updateGame = (gameId, player, updatedLife) => {
