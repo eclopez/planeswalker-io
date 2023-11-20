@@ -22,10 +22,11 @@ function Page({ params }: GameParams) {
 
   return (
     <>
-      {game.map((player) => (
+      {game.map((player, index) => (
         <Player
           key={player.name}
           gameId={id}
+          playerId={index}
           name={player.name}
           life={player.life}
         />
