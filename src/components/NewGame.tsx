@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { CaretDownIcon } from "@radix-ui/react-icons";
 import {
   Box,
@@ -18,33 +19,33 @@ import {
   SelectContent,
   SelectItem,
 } from "@radix-ui/themes";
-import { GameProps } from "app/page";
+import useLocalStorage from "hooks/useLocalStorage";
 
 const NUMBER_OF_PLAYERS = [1, 2, 3, 4, 5, 6] as const;
 const DEFAULT_STARTING_LIFE: number = 40;
 
-export interface NewGameProps {
-  startGame: (args: GameProps) => void;
-}
+function NewGame() {
+  const router = useRouter();
+  const { initGame } = useLocalStorage();
 
-function NewGame({ startGame }: NewGameProps) {
   const [players, setPlayers] = useState<(typeof NUMBER_OF_PLAYERS)[number]>(2);
 
   const updatePlayers = (value: string) => {
     setPlayers(parseInt(value) as (typeof NUMBER_OF_PLAYERS)[number]);
   };
 
-  const start = (formData: FormData) => {
-    const startingLife = formData.get("startingLife") || 40;
-    const num: number = +formData.get("numberOfPlayers");
+  const startGame = (formData: FormData) => {
+    const gameId = `plw-${Date.now()}`;
+    const startingLife: number = +formData.get("startingLife") || 40;
+    const numberOfPlayers: number = +formData.get("numberOfPlayers");
     const names = [];
-    for (let i = 1; i <= num; i++) {
+
+    for (let i = 1; i <= numberOfPlayers; i++) {
       names.push(formData.get(`playerName${i}`) || `Player ${i}`);
     }
-    startGame({
-      startingLife: +startingLife!,
-      players: names,
-    });
+
+    initGame(gameId, names, startingLife);
+    router.push(`/game/${gameId}`);
   };
 
   return (
@@ -54,7 +55,7 @@ function NewGame({ startGame }: NewGameProps) {
       </DialogTrigger>
       <DialogContent>
         <DialogTitle mb="5">New Game</DialogTitle>
-        <form action={start}>
+        <form action={startGame}>
           <Box mb="5">
             <label>
               <Text as="div" size="2" weight="medium" mb="2">

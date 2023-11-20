@@ -4,7 +4,9 @@ import styles from "@/styles/Header.module.css";
 function Header() {
   return (
     <Flex px="1" className={styles.header}>
-      <Heading size="6">Planeswalker.io</Heading>
+      <Heading size="6">
+        <a href="/">Planeswalker.io</a>
+      </Heading>
     </Flex>
   );
 }

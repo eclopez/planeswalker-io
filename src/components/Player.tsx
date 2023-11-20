@@ -1,25 +1,37 @@
 import { useState } from "react";
 import { Card, Flex, Text, Button } from "@radix-ui/themes";
 import { PlusIcon, MinusIcon } from "@radix-ui/react-icons";
+import useLocalStorage from "hooks/useLocalStorage";
 
 interface PlayerProps {
+  gameId: string;
   name: string;
-  readonly startingLife: number;
+  readonly life: number;
 }
 
-function Player({ name, startingLife }: PlayerProps) {
-  const [life, setLife] = useState(startingLife);
+function Player({ gameId, name, life }: PlayerProps) {
+  const [currentLife, setCurrentLife] = useState<number>(life);
+  const { updateGame } = useLocalStorage();
+
+  // TODO: use a debounce here
+  const updateLife = (updatedLife: number) => {
+    setCurrentLife((l) => {
+      let newLife = l + updatedLife;
+      updateGame(gameId, name, newLife);
+      return newLife;
+    });
+  };
 
   return (
     <Card>
       <Flex gap="1" justify={"between"}>
         <Text size="7">{name}</Text>
         <Flex>
-          <Button onClick={() => setLife(life + 1)}>
+          <Button onClick={() => updateLife(1)}>
             <PlusIcon />
           </Button>
-          <Text size="7">{life}</Text>
-          <Button onClick={() => setLife(life - 1)}>
+          <Text size="7">{currentLife}</Text>
+          <Button onClick={() => updateLife(-1)}>
             <MinusIcon />
           </Button>
         </Flex>

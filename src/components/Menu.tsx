@@ -1,12 +1,20 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { Flex, Button } from "@radix-ui/themes";
 import NewGame from "@/components/NewGame";
-import { GameProps } from "app/page";
+import ContinueGame from "@/components/ContinueGame";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
-export interface MenuProps {
-  startGame: (args: GameProps) => void;
-}
+function Menu() {
+  const [games, setGames] = useState<string[]>([]);
+  const { retrieveGameList } = useLocalStorage();
 
-function Menu({ startGame }: MenuProps) {
+  useEffect(() => {
+    setGames(() => retrieveGameList());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Flex align="center" justify="center" style={{ gridColumn: "1 / 3" }}>
       <Flex
@@ -14,11 +22,11 @@ function Menu({ startGame }: MenuProps) {
         gap="4"
         style={{ width: "180px", height: "fit-content" }}
       >
-        <NewGame startGame={startGame} />
+        <NewGame />
+        <ContinueGame games={games} />
         <Button size="3" disabled>
-          Continue
+          About
         </Button>
-        <Button size="3">About</Button>
       </Flex>
     </Flex>
   );
