@@ -8,7 +8,13 @@ import {
   DialogTitle,
   DialogClose,
   Flex,
+  ScrollArea,
+  TableRoot,
+  TableBody,
+  TableCell,
+  TableRow,
 } from "@radix-ui/themes";
+import Link from "next/link";
 
 interface ContinueGameProps {
   games: string[];
@@ -30,23 +36,31 @@ function ContinueGame({ games }: ContinueGameProps) {
       </DialogTrigger>
       <DialogContent>
         <DialogTitle mb="5">Continue Game</DialogTitle>
-        {games.map((game) => (
-          <Box key={game} mb="4">
-            <Button size="3" onClick={() => continueGame(game)}>
-              {new Date(parseInt(game.substring(4))).toLocaleDateString(
-                "en-us",
-                {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                  hour: "numeric",
-                  minute: "numeric",
-                }
-              )}
-            </Button>
-          </Box>
-        ))}
+        <ScrollArea
+          type="always"
+          scrollbars="vertical"
+          style={{
+            height: "30dvh",
+          }}
+        >
+          {games.map((game) => (
+            <Box key={game} p="2">
+              <Button variant="ghost" onClick={() => continueGame(game)}>
+                {new Date(parseInt(game.substring(4))).toLocaleDateString(
+                  "en-us",
+                  {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "numeric",
+                  }
+                )}
+              </Button>
+            </Box>
+          ))}
+        </ScrollArea>
         <Flex gap="4">
           <DialogClose>
             <Button variant="outline">Cancel</Button>

@@ -15,6 +15,7 @@
     "jsx": "preserve",
     "paths": {
       "@/components/*": ["components/*"],
+      "@/helpers/*": ["helpers/*"],
       "@/hooks/*": ["hooks/*"],
       "@/mocks/*": ["__mocks__/*"],
       "@/styles/*": ["styles/*"]

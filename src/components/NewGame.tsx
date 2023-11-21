@@ -19,14 +19,13 @@ import {
   SelectContent,
   SelectItem,
 } from "@radix-ui/themes";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import { initGame } from "@/helpers/localStorageHelper";
 
 const NUMBER_OF_PLAYERS = [1, 2, 3, 4, 5, 6] as const;
 const DEFAULT_STARTING_LIFE: number = 40;
 
 function NewGame() {
   const router = useRouter();
-  const { initGame } = useLocalStorage();
 
   const [players, setPlayers] = useState<(typeof NUMBER_OF_PLAYERS)[number]>(2);
 

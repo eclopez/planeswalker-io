@@ -2,11 +2,8 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Player from "@/components/Player";
 
-jest.mock("../../hooks/useLocalStorage", () => ({
-  __esModule: true,
-  default: () => {
-    return { updateGame: jest.fn };
-  },
+jest.mock("../../helpers/localStorageHelper", () => ({
+  updateGame: jest.fn,
 }));
 
 describe("Player", () => {
