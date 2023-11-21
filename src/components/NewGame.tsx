@@ -36,7 +36,7 @@ function NewGame() {
 
   const startGame = (formData: FormData) => {
     const gameId = `plw-${Date.now()}`;
-    const startingLife: number = +formData.get("startingLife") || 40;
+    const startingLife: number = +formData.get("startingLife") || 0;
     const numberOfPlayers: number = +formData.get("numberOfPlayers");
     const names = [];
 
