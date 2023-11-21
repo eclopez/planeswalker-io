@@ -3,7 +3,7 @@ import {
   TwoPlayerGame,
   ThreePlayerGame,
   FourPlayerGame,
-} from "../__mocks__/GameMocks";
+} from "@/mocks/GameMocks";
 
 import { info } from "console";
 
