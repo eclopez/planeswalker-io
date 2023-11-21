@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Card, Flex, Text, Button } from "@radix-ui/themes";
 import { PlusIcon, MinusIcon } from "@radix-ui/react-icons";
-import useLocalStorage from "hooks/useLocalStorage";
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 interface PlayerProps {
   gameId: string;
