@@ -1,6 +1,6 @@
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Box,
   Button,
   DialogRoot,
   DialogTrigger,
@@ -8,27 +8,64 @@ import {
   DialogTitle,
   DialogClose,
   Flex,
+  IconButton,
   ScrollArea,
-  TableRoot,
-  TableBody,
-  TableCell,
-  TableRow,
 } from "@radix-ui/themes";
-import Link from "next/link";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
+import {
+  retrieveGameList,
+  removeGame,
+  removeAllGames,
+} from "../helpers/localStorageHelper";
+import ConfirmDialog from "./ConfirmDialog";
 
-interface ContinueGameProps {
-  games: string[];
-}
-
-function ContinueGame({ games }: ContinueGameProps) {
+function ContinueGame() {
+  const [open, setOpen] = useState<boolean>(false);
+  const [games, setGames] = useState<string[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    setGames(() => retrieveGameList());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (games.length === 0) {
+      setOpen(() => false);
+    }
+  }, [games]);
+
+  const gameTextName = (game) => {
+    return new Date(parseInt(game.substring(4))).toLocaleDateString("en-us", {
+      weekday: "long",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+    });
+  };
 
   const continueGame = (game) => {
     router.push(`/game/${game}`);
   };
 
+  const deleteGame = (game) => {
+    setGames(() => {
+      removeGame(game);
+      return retrieveGameList();
+    });
+  };
+
+  const deleteAllGames = () => {
+    setGames(() => {
+      removeAllGames();
+      return retrieveGameList();
+    });
+  };
+
   return (
-    <DialogRoot>
+    <DialogRoot open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <Button size="3" disabled={games.length === 0}>
           Continue Game
@@ -37,34 +74,60 @@ function ContinueGame({ games }: ContinueGameProps) {
       <DialogContent>
         <DialogTitle mb="5">Continue Game</DialogTitle>
         <ScrollArea
-          type="always"
           scrollbars="vertical"
           style={{
             height: "30dvh",
           }}
         >
           {games.map((game) => (
-            <Box key={game} p="2">
+            <Flex
+              key={game}
+              p="2"
+              mr="5"
+              direction="row"
+              gap="3"
+              justify="between"
+              align="center"
+              style={{ borderBottom: "solid 1px var(--gray-5)" }}
+            >
               <Button variant="ghost" onClick={() => continueGame(game)}>
-                {new Date(parseInt(game.substring(4))).toLocaleDateString(
-                  "en-us",
-                  {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                    hour: "numeric",
-                    minute: "numeric",
-                  }
-                )}
+                {gameTextName(game)}
               </Button>
-            </Box>
+              <ConfirmDialog
+                title="Confirm delete"
+                description={`Are you sure you want to delete the game from ${gameTextName(
+                  game
+                )}?`}
+                actionButton="Delete"
+                cancelButton="Cancel"
+                action={() => deleteGame(game)}
+                danger
+              >
+                <IconButton variant="ghost" color="ruby" size="1">
+                  <CrossCircledIcon width="18" height="18" />
+                </IconButton>
+              </ConfirmDialog>
+            </Flex>
           ))}
         </ScrollArea>
         <Flex gap="4">
-          <DialogClose>
-            <Button variant="outline">Cancel</Button>
-          </DialogClose>
+          <Flex direction="row" justify="between" style={{ width: "100%" }}>
+            <DialogClose>
+              <Button>Cancel</Button>
+            </DialogClose>
+            <ConfirmDialog
+              title="Confirm delete"
+              description="Are you sure you want to delete all of your games?"
+              actionButton="Delete all games"
+              cancelButton="Cancel"
+              action={() => deleteAllGames()}
+              danger
+            >
+              <Button variant="outline" color="ruby">
+                Delete all games
+              </Button>
+            </ConfirmDialog>
+          </Flex>
         </Flex>
       </DialogContent>
     </DialogRoot>
