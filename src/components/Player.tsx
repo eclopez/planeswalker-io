@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Card, Flex, Text, Button } from "@radix-ui/themes";
 import { PlusIcon, MinusIcon } from "@radix-ui/react-icons";
 import useDebounce from "@/hooks/useDebounce";
-import useLocalStorage from "@/hooks/useLocalStorage";
+import { updateGame } from "@/helpers/localStorageHelper";
 
 interface PlayerProps {
   gameId: string;
@@ -13,7 +13,6 @@ interface PlayerProps {
 
 function Player({ gameId, playerId, name, life }: PlayerProps) {
   const [currentLife, setCurrentLife] = useState<number>(life);
-  const { updateGame } = useLocalStorage();
   const debouncedLifeTotal = useDebounce<number>(currentLife, 700);
 
   const handleLifeChange = (delta: number) => {
