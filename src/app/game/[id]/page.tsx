@@ -30,6 +30,7 @@ function Page({ params }: GameParams) {
             playerId={index}
             name={player.name}
             life={player.life}
+            solo={game.length === 1}
           />
         ))}
       </>
