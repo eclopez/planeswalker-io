@@ -9,9 +9,10 @@ interface PlayerProps {
   playerId: number;
   name: string;
   readonly life: number;
+  solo?: boolean;
 }
 
-function Player({ gameId, playerId, name, life }: PlayerProps) {
+function Player({ gameId, playerId, name, life, solo = false }: PlayerProps) {
   const [currentLife, setCurrentLife] = useState<number>(life);
   const debouncedLifeTotal = useDebounce<number>(currentLife, 700);
 
@@ -25,7 +26,7 @@ function Player({ gameId, playerId, name, life }: PlayerProps) {
   }, [debouncedLifeTotal]);
 
   return (
-    <Card>
+    <Card style={{ gridColumn: solo ? "1 / 3" : "" }}>
       <Flex gap="1" justify={"between"}>
         <Text size="7">{name}</Text>
         <Flex>
