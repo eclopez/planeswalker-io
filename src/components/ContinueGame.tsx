@@ -90,7 +90,11 @@ function ContinueGame() {
               align="center"
               style={{ borderBottom: "solid 1px var(--gray-5)" }}
             >
-              <Button variant="ghost" onClick={() => continueGame(game)}>
+              <Button
+                variant="ghost"
+                data-testid="continueGameLink"
+                onClick={() => continueGame(game)}
+              >
                 {gameTextName(game)}
               </Button>
               <ConfirmDialog
