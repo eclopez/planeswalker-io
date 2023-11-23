@@ -35,7 +35,9 @@ function Player({ gameId, playerId, name, life }: PlayerProps) {
           >
             <PlusIcon />
           </Button>
-          <Text size="7">{currentLife}</Text>
+          <Text size="7" data-testid="lifeTotal">
+            {currentLife}
+          </Text>
           <Button
             data-testid="decrementLife"
             onClick={() => handleLifeChange(-1)}
