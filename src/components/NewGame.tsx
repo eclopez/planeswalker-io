@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { CaretDownIcon } from "@radix-ui/react-icons";
 import {
@@ -28,21 +28,27 @@ function NewGame() {
   const router = useRouter();
 
   const [players, setPlayers] = useState<(typeof NUMBER_OF_PLAYERS)[number]>(2);
+  const startButtonRef = useRef(null);
+  const cancelButtonRef = useRef(null);
 
   const updatePlayers = (value: string) => {
     setPlayers(parseInt(value) as (typeof NUMBER_OF_PLAYERS)[number]);
   };
 
   const startGame = (formData: FormData) => {
+    // Disables start and cancel button without the need for a re-render
+    startButtonRef.current.setAttribute("disabled", "");
+    startButtonRef.current.setAttribute("data-disabled", "true");
+    cancelButtonRef.current.setAttribute("disabled", "");
+    cancelButtonRef.current.setAttribute("data-disabled", "true");
+
     const gameId = `plw-${Date.now()}`;
     const startingLife: number = +formData.get("startingLife") || 0;
     const numberOfPlayers: number = +formData.get("numberOfPlayers");
     const names = [];
-
     for (let i = 1; i <= numberOfPlayers; i++) {
       names.push(formData.get(`playerName${i}`) || `Player ${i}`);
     }
-
     initGame(gameId, names, startingLife);
     router.push(`/game/${gameId}`);
   };
@@ -119,9 +125,13 @@ function NewGame() {
             ))}
           </Box>
           <Flex gap="4">
-            <Button type="submit">Start</Button>
+            <Button type="submit" ref={startButtonRef}>
+              Start
+            </Button>
             <DialogClose>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" ref={cancelButtonRef}>
+                Cancel
+              </Button>
             </DialogClose>
           </Flex>
         </form>
