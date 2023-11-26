@@ -1,38 +1,29 @@
-const initGame = (gameId: string, players: string[], startingLife: number) => {
-  const game = [];
+import {
+  PlayerCounterTypes,
+  GameTypes,
+  PlayerGameTypes,
+  PlayerCounterTypesRecord,
+} from "@/types/GameTypes";
 
-  players.forEach((player: string, index: number) => {
-    game.push({
-      playerId: index,
-      name: player,
-      life: startingLife,
-    });
-  });
-
-  localStorage.setItem(gameId, JSON.stringify(game));
+const saveGame = (game: GameTypes) => {
+  const gameId = Object.keys(game)[0];
+  localStorage.setItem(gameId, JSON.stringify(game[gameId]));
 };
 
-const retrieveGame = (gameId: string) => {
-  return JSON.parse(localStorage.getItem(gameId));
+const loadGame = (gameId: string): GameTypes => {
+  return { [gameId]: JSON.parse(localStorage.getItem(gameId)) };
 };
 
-const retrieveGameList = (): string[] => {
-  const storedGames = { ...localStorage };
-  let games = [];
+const loadGameList = (): string[] => {
+  let gameIds = [];
 
-  for (const game in storedGames) {
-    if (game.startsWith("plw-")) {
-      games.push(game);
+  for (const gameId in { ...localStorage }) {
+    if (gameId.match(/plw-*/)) {
+      gameIds.push(gameId);
     }
   }
 
-  return games.sort();
-};
-
-const updateGame = (gameId: string, playerId: number, updatedLife: number) => {
-  let game = JSON.parse(localStorage.getItem(gameId));
-  game[playerId].life = updatedLife;
-  localStorage.setItem(gameId, JSON.stringify(game));
+  return gameIds.sort();
 };
 
 const removeGame = (gameId: string) => {
@@ -40,17 +31,27 @@ const removeGame = (gameId: string) => {
 };
 
 const removeAllGames = () => {
-  const games = retrieveGameList();
+  const games = loadGameList();
   games.forEach((game) => {
     removeGame(game);
   });
 };
 
+const updatePlayerCounters = (
+  gameId: string,
+  id: number,
+  counters: PlayerCounterTypesRecord
+) => {
+  const game = loadGame(gameId);
+  game[gameId][id].counters = counters;
+  saveGame(game);
+};
+
 export {
-  initGame,
-  retrieveGame,
-  retrieveGameList,
-  updateGame,
+  saveGame,
+  loadGame,
+  loadGameList,
   removeGame,
   removeAllGames,
+  updatePlayerCounters,
 };
