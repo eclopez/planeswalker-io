@@ -1,19 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useReducer } from "react";
 import { Card, Flex, Text, Button } from "@radix-ui/themes";
 import { PlusIcon, MinusIcon } from "@radix-ui/react-icons";
+import playerReducer, { PLAYER_ACTION } from "@/hooks/usePlayerReducer";
 import useDebounce from "@/hooks/useDebounce";
-import { updateGame } from "@/helpers/localStorageHelper";
+import { PlayerCounterTypes, PlayerGameTypes } from "@/types/GameTypes";
 
 interface PlayerProps {
   gameId: string;
-  playerId: number;
-  name: string;
-  readonly life: number;
+  player: PlayerGameTypes;
   solo?: boolean;
 }
 
-function Player({ gameId, playerId, name, life, solo = false }: PlayerProps) {
-  const [currentLife, setCurrentLife] = useState<number>(life);
+function Player({ gameId, player, solo = false }: PlayerProps) {
+  const [state, dispatch] = useReducer(playerReducer, player);
+  const [currentLife, setCurrentLife] = useState<number>(player.counters.life);
+  const [currentPoison] = useState<number>(player.counters.poison);
   const debouncedLifeTotal = useDebounce<number>(currentLife, 700);
 
   const handleLifeChange = (delta: number) => {
@@ -21,14 +22,20 @@ function Player({ gameId, playerId, name, life, solo = false }: PlayerProps) {
   };
 
   useEffect(() => {
-    updateGame(gameId, playerId, currentLife);
+    dispatch({
+      type: PLAYER_ACTION.UPDATE_COUNTERS,
+      payload: {
+        gameId,
+        counters: { life: currentLife, poison: currentPoison },
+      },
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedLifeTotal]);
 
   return (
     <Card style={{ gridColumn: solo ? "1 / 3" : "" }}>
       <Flex gap="1" justify={"between"}>
-        <Text size="7">{name}</Text>
+        <Text size="7">{state.name}</Text>
         <Flex>
           <Button
             data-testid="incrementLife"

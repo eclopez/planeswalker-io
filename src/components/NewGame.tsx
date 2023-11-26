@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useEffect, useReducer, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { CaretDownIcon } from "@radix-ui/react-icons";
 import {
@@ -19,17 +19,27 @@ import {
   SelectContent,
   SelectItem,
 } from "@radix-ui/themes";
-import { initGame } from "@/helpers/localStorageHelper";
+import gameReducer, { GAME_ACTION } from "@/hooks/useGameReducer";
+import { PlayerGameTypes } from "types/GameTypes";
 
 const NUMBER_OF_PLAYERS = [1, 2, 3, 4, 5, 6] as const;
 const DEFAULT_STARTING_LIFE: number = 40;
 
 function NewGame() {
   const router = useRouter();
-
+  const [state, dispatch] = useReducer(gameReducer, {});
   const [players, setPlayers] = useState<(typeof NUMBER_OF_PLAYERS)[number]>(2);
+
   const startButtonRef = useRef(null);
   const cancelButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (Object.keys(state).length === 1) {
+      const gameId = Object.keys(state)[0];
+      router.push(`/game/${gameId}`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
 
   const updatePlayers = (value: string) => {
     setPlayers(parseInt(value) as (typeof NUMBER_OF_PLAYERS)[number]);
@@ -45,12 +55,27 @@ function NewGame() {
     const gameId = `plw-${Date.now()}`;
     const startingLife: number = +formData.get("startingLife") || 0;
     const numberOfPlayers: number = +formData.get("numberOfPlayers");
-    const names = [];
+
+    const players: PlayerGameTypes[] = [];
     for (let i = 1; i <= numberOfPlayers; i++) {
-      names.push(formData.get(`playerName${i}`) || `Player ${i}`);
+      players.push({
+        id: i - 1,
+        name: (formData.get(`playerName${i}`) || `Player ${i}`) as string,
+        commanderImage: null,
+        counters: {
+          life: startingLife,
+          poison: 0,
+        },
+      });
     }
-    initGame(gameId, names, startingLife);
-    router.push(`/game/${gameId}`);
+
+    dispatch({
+      type: GAME_ACTION.CREATE_GAME,
+      payload: {
+        id: gameId,
+        players,
+      },
+    });
   };
 
   return (

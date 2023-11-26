@@ -5,12 +5,12 @@ import * as localStorageHelper from "../../helpers/localStorageHelper";
 
 jest.mock("next/navigation", () => ({ useRouter: jest.fn }));
 jest.mock("../../helpers/localStorageHelper", () => ({
-  retrieveGameList: jest.fn(),
+  loadGameList: jest.fn(),
 }));
 
 describe("ContinueGame", () => {
   it("should render a disabled continue button when there are no games returned from localStorage", () => {
-    jest.spyOn(localStorageHelper, "retrieveGameList").mockReturnValue([]);
+    jest.spyOn(localStorageHelper, "loadGameList").mockReturnValue([]);
 
     render(<ContinueGame />);
 
@@ -20,7 +20,7 @@ describe("ContinueGame", () => {
 
   it("should render the continue button when there are games returned from localStorage", async () => {
     jest
-      .spyOn(localStorageHelper, "retrieveGameList")
+      .spyOn(localStorageHelper, "loadGameList")
       .mockReturnValue(["plw-100064376284376"]);
 
     render(<ContinueGame />);
