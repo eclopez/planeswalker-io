@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useReducer, useEffect } from "react";
 import { Flex, Heading } from "@radix-ui/themes";
-import { retrieveGame } from "@/helpers/localStorageHelper";
+import { PlayerGameTypes } from "@/types/GameTypes";
+import gameReducer, { GAME_ACTION } from "@/hooks/useGameReducer";
 import Player from "@/components/Player";
 
 interface GameParams {
@@ -12,25 +13,23 @@ interface GameParams {
 }
 
 function Page({ params }: GameParams) {
-  const [game, setGame] = useState([]);
+  const [state, dispatch] = useReducer(gameReducer, {});
   const { id } = params;
 
   useEffect(() => {
-    setGame(retrieveGame(id));
+    dispatch({ type: GAME_ACTION.LOAD_GAME, payload: { id } });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (game) {
+  if (state[id]) {
     return (
       <>
-        {game.map((player, index) => (
+        {state[id].map((player: PlayerGameTypes, index: number) => (
           <Player
             key={player.name}
             gameId={id}
-            playerId={index}
-            name={player.name}
-            life={player.life}
-            solo={game.length === 1}
+            player={player}
+            solo={state[id].length === 1}
           />
         ))}
       </>

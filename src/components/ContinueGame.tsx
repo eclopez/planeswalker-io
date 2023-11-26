@@ -13,7 +13,7 @@ import {
 } from "@radix-ui/themes";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import {
-  retrieveGameList,
+  loadGameList,
   removeGame,
   removeAllGames,
 } from "../helpers/localStorageHelper";
@@ -25,7 +25,7 @@ function ContinueGame() {
   const router = useRouter();
 
   useEffect(() => {
-    setGames(() => retrieveGameList());
+    setGames(() => loadGameList());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -53,14 +53,14 @@ function ContinueGame() {
   const deleteGame = (game) => {
     setGames(() => {
       removeGame(game);
-      return retrieveGameList();
+      return loadGameList();
     });
   };
 
   const deleteAllGames = () => {
     setGames(() => {
       removeAllGames();
-      return retrieveGameList();
+      return loadGameList();
     });
   };
 
