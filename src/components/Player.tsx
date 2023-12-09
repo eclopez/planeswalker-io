@@ -22,12 +22,27 @@ function Player({ gameId, player, solo = false }: PlayerProps) {
   const debouncedLifeTotal = useDebounce<number>(currentLife, 700);
 
   const handleLifeChange = (delta: number) => {
+    console.log(`changin' that life by ${delta}`);
     setCurrentLife((life) => life + delta);
   };
 
   const handleCommanderDamageChange = (
     commanderDamage: CommanderDamageType
   ) => {
+    let previousAggregateCommanderDamage: number = 0;
+    let newAggregateCommanderDamage: number = 0;
+
+    state.commanderDamage?.forEach(
+      (damage) => (previousAggregateCommanderDamage += damage)
+    );
+    commanderDamage?.forEach(
+      (damage) => (newAggregateCommanderDamage += damage)
+    );
+
+    handleLifeChange(
+      previousAggregateCommanderDamage - newAggregateCommanderDamage
+    );
+
     dispatch({
       type: PLAYER_ACTION.UPDATE_COMMANDER_DAMAGE,
       payload: { gameId, commanderDamage },
