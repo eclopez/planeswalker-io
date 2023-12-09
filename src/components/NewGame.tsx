@@ -56,18 +56,32 @@ function NewGame() {
     const startingLife: number = +formData.get("startingLife") || 0;
     const numberOfPlayers: number = +formData.get("numberOfPlayers");
 
-    const players: PlayerGameTypes[] = [];
+    const playerNames: string[] = [];
     for (let i = 1; i <= numberOfPlayers; i++) {
+      playerNames.push(
+        (formData.get(`playerName${i}`) || `Player ${i}`) as string
+      );
+    }
+
+    const players: PlayerGameTypes[] = [];
+    playerNames.forEach((player, index) => {
+      const opponents: string[] = playerNames.filter((name) => player !== name);
+      const commanderDamage: CommanderDamageType = new Map();
+      opponents.forEach((opponent) => {
+        commanderDamage.set(opponent, 0);
+      });
+
       players.push({
-        id: i - 1,
-        name: (formData.get(`playerName${i}`) || `Player ${i}`) as string,
+        id: index,
+        name: player,
         commanderImage: null,
         counters: {
           life: startingLife,
           poison: 0,
         },
+        commanderDamage,
       });
-    }
+    });
 
     dispatch({
       type: GAME_ACTION.CREATE_GAME,
