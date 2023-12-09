@@ -69,7 +69,7 @@ function NewGame() {
     playerNames.forEach((player, index) => {
       const opponents: string[] = playerNames.filter((name) => player !== name);
       let commanderDamage: CommanderDamageType | null = null;
-      if (commanderGame) {
+      if (commanderGame && opponents.length > 1) {
         commanderDamage = new Map();
         opponents.forEach((opponent) => {
           commanderDamage.set(opponent, 0);
