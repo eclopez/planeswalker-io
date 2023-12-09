@@ -69,6 +69,16 @@ const updatePlayerCounters = (
   saveGame(game);
 };
 
+const updatePlayerCommanderDamage = (
+  gameId: string,
+  id: number,
+  commanderDamage: CommanderDamageType
+) => {
+  const game = loadGame(gameId);
+  game[gameId][id].commanderDamage = commanderDamage;
+  saveGame(game);
+};
+
 export {
   saveGame,
   loadGame,
@@ -76,4 +86,5 @@ export {
   removeGame,
   removeAllGames,
   updatePlayerCounters,
+  updatePlayerCommanderDamage,
 };

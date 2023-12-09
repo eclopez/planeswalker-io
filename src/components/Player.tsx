@@ -1,9 +1,10 @@
 import { useEffect, useState, useReducer } from "react";
-import { Card, Flex, Text, Button } from "@radix-ui/themes";
+import { Button, Card, Flex, Text } from "@radix-ui/themes";
 import { PlusIcon, MinusIcon } from "@radix-ui/react-icons";
 import playerReducer, { PLAYER_ACTION } from "@/hooks/usePlayerReducer";
 import useDebounce from "@/hooks/useDebounce";
 import { CommanderDamageType, PlayerGameTypes } from "@/types/GameTypes";
+import CommanderDamage from "@/components/CommanderDamage";
 
 interface PlayerProps {
   gameId: string;
@@ -12,13 +13,25 @@ interface PlayerProps {
 }
 
 function Player({ gameId, player, solo = false }: PlayerProps) {
-  const [state, dispatch] = useReducer(playerReducer, player);
+  const [state, dispatch] = useReducer(
+    playerReducer,
+    player as PlayerGameTypes
+  );
   const [currentLife, setCurrentLife] = useState<number>(player.counters.life);
   const [currentPoison] = useState<number>(player.counters.poison);
   const debouncedLifeTotal = useDebounce<number>(currentLife, 700);
 
   const handleLifeChange = (delta: number) => {
     setCurrentLife((life) => life + delta);
+  };
+
+  const handleCommanderDamageChange = (
+    commanderDamage: CommanderDamageType
+  ) => {
+    dispatch({
+      type: PLAYER_ACTION.UPDATE_COMMANDER_DAMAGE,
+      payload: { gameId, commanderDamage },
+    });
   };
 
   useEffect(() => {
@@ -34,25 +47,34 @@ function Player({ gameId, player, solo = false }: PlayerProps) {
 
   return (
     <Card style={{ gridColumn: solo ? "1 / 3" : "" }}>
-      <Flex gap="1" justify={"between"}>
-        <Text size="7">{state.name}</Text>
-        <Flex>
-          <Button
-            data-testid="incrementLife"
-            onClick={() => handleLifeChange(1)}
-          >
-            <PlusIcon />
-          </Button>
-          <Text size="7" data-testid="lifeTotal">
-            {currentLife}
-          </Text>
-          <Button
-            data-testid="decrementLife"
-            onClick={() => handleLifeChange(-1)}
-          >
-            <MinusIcon />
-          </Button>
+      <Flex direction="column" gap="2">
+        <Flex gap="1" justify={"between"}>
+          <Text size="7">{state.name}</Text>
+          <Flex>
+            <Button
+              data-testid="incrementLife"
+              onClick={() => handleLifeChange(1)}
+            >
+              <PlusIcon />
+            </Button>
+            <Text size="7" data-testid="lifeTotal">
+              {currentLife}
+            </Text>
+            <Button
+              data-testid="decrementLife"
+              onClick={() => handleLifeChange(-1)}
+            >
+              <MinusIcon />
+            </Button>
+          </Flex>
         </Flex>
+        {state.commanderDamage && (
+          <CommanderDamage
+            commanderDamage={state.commanderDamage}
+            playerName={state.name}
+            handleChange={handleCommanderDamageChange}
+          />
+        )}
       </Flex>
     </Card>
   );
