@@ -31,6 +31,7 @@ function CommanderDamage({
     useState<CommanderDamageType>(new Map(commanderDamage));
 
   const handleDamageChange = (opponent: string, delta: number) => {
+    if (tempCommanderDamage.get(opponent) + delta < 0) return;
     setTempCommanderDamage((prevState) => {
       const newState = new Map(prevState);
       newState.set(opponent, newState.get(opponent) + delta);
