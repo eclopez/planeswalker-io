@@ -18,9 +18,10 @@ import {
   SelectTrigger,
   SelectContent,
   SelectItem,
+  Switch,
 } from "@radix-ui/themes";
 import gameReducer, { GAME_ACTION } from "@/hooks/useGameReducer";
-import { PlayerGameTypes } from "types/GameTypes";
+import { CommanderDamageType, PlayerGameTypes } from "types/GameTypes";
 
 const NUMBER_OF_PLAYERS = [1, 2, 3, 4, 5, 6] as const;
 const DEFAULT_STARTING_LIFE: number = 40;
@@ -54,20 +55,38 @@ function NewGame() {
 
     const gameId = `plw-${Date.now()}`;
     const startingLife: number = +formData.get("startingLife") || 0;
+    const commanderGame: boolean = formData.get("commanderGame") === "on";
     const numberOfPlayers: number = +formData.get("numberOfPlayers");
 
-    const players: PlayerGameTypes[] = [];
+    const playerNames: string[] = [];
     for (let i = 1; i <= numberOfPlayers; i++) {
+      playerNames.push(
+        (formData.get(`playerName${i}`) || `Player ${i}`) as string
+      );
+    }
+
+    const players: PlayerGameTypes[] = [];
+    playerNames.forEach((player, index) => {
+      const opponents: string[] = playerNames.filter((name) => player !== name);
+      let commanderDamage: CommanderDamageType | null = null;
+      if (commanderGame) {
+        commanderDamage = new Map();
+        opponents.forEach((opponent) => {
+          commanderDamage.set(opponent, 0);
+        });
+      }
+
       players.push({
-        id: i - 1,
-        name: (formData.get(`playerName${i}`) || `Player ${i}`) as string,
+        id: index,
+        name: player,
         commanderImage: null,
         counters: {
           life: startingLife,
           poison: 0,
         },
+        commanderDamage,
       });
-    }
+    });
 
     dispatch({
       type: GAME_ACTION.CREATE_GAME,
@@ -100,6 +119,12 @@ function NewGame() {
               />
             </label>
           </Box>
+          <Flex mb="5" direction="row" asChild gap="5">
+            <Text as="div" size="2" weight="medium" mb="2">
+              Commander game?
+              <Switch name="commanderGame" />
+            </Text>
+          </Flex>
           <Box mb="5">
             <label>
               <Text as="div" size="2" weight="medium" mb="2">

@@ -1,19 +1,15 @@
-type PlayerCounterTypes = "life" | "poison";
+export type PlayerCounterTypes = "life" | "poison";
 
-type PlayerCounterTypesRecord = Record<PlayerCounterTypes, number>;
+export type PlayerCounterTypesRecord = Record<PlayerCounterTypes, number>;
 
-interface PlayerGameTypes {
+export type CommanderDamageType = Map<string, number>;
+
+export interface PlayerGameTypes {
   id: number;
   name: string;
   commanderImage: string;
   counters: PlayerCounterTypesRecord;
+  commanderDamage?: CommanderDamageType;
 }
 
-type GameTypes = Record<string, PlayerGameTypes[]>;
-
-export {
-  type PlayerCounterTypes,
-  type PlayerCounterTypesRecord,
-  type PlayerGameTypes,
-  type GameTypes,
-};
+export type GameTypes = Record<string, PlayerGameTypes[]>;
