@@ -1,8 +1,7 @@
 import {
-  PlayerCounterTypes,
   GameTypes,
-  PlayerGameTypes,
   PlayerCounterTypesRecord,
+  CommanderDamageType,
 } from "@/types/GameTypes";
 
 const mapReplacer = (_: string, v: any) => {

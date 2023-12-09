@@ -3,7 +3,7 @@ import { Card, Flex, Text, Button } from "@radix-ui/themes";
 import { PlusIcon, MinusIcon } from "@radix-ui/react-icons";
 import playerReducer, { PLAYER_ACTION } from "@/hooks/usePlayerReducer";
 import useDebounce from "@/hooks/useDebounce";
-import { PlayerCounterTypes, PlayerGameTypes } from "@/types/GameTypes";
+import { CommanderDamageType, PlayerGameTypes } from "@/types/GameTypes";
 
 interface PlayerProps {
   gameId: string;
