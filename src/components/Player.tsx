@@ -22,7 +22,6 @@ function Player({ gameId, player, solo = false }: PlayerProps) {
   const debouncedLifeTotal = useDebounce<number>(currentLife, 700);
 
   const handleLifeChange = (delta: number) => {
-    console.log(`changin' that life by ${delta}`);
     setCurrentLife((life) => life + delta);
   };
 
