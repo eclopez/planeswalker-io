@@ -1,4 +1,5 @@
 import { Viewport } from "next";
+import Script from "next/script";
 import { Theme, Grid } from "@radix-ui/themes";
 import Header from "@/components/Header";
 import "the-new-css-reset/css/reset.css";
@@ -18,6 +19,19 @@ export const viewport: Viewport = {
 function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GA_MEASUREMENT_ID}`}
+        />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.GA_MEASUREMENT_ID}');
+          `}
+        </Script>
+      </head>
       <body>
         <Theme appearance="dark" accentColor="violet">
           <Grid
