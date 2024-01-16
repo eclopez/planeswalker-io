@@ -58,7 +58,7 @@ export const Players: PlayerGameTypes[] = [
 ];
 
 export const OnePlayerGame: GameTypes = {
-  "plw-1700522030902": [...Players.slice(0, 2)],
+  "plw-1700522030902": [...Players.slice(0, 1)],
 };
 
 export const TwoPlayerGame: GameTypes = {

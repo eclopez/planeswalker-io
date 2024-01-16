@@ -1,26 +1,23 @@
 import React from "react";
-import { Preview, ReactRenderer } from "@storybook/react";
-import { withThemeByClassName } from "@storybook/addon-themes";
+import { Preview } from "@storybook/react";
 import { Theme, colorProp } from "@radix-ui/themes";
-import "the-new-css-reset/css/reset.css";
-import "@radix-ui/themes/styles.css";
-import "../src/styles/styles.css";
+import "@/styles/globalStyles.css";
 
 const preview: Preview = {
   globalTypes: {
-    theme: {
-      description: "Global theme for components",
-      defaultValue: "light",
+    brightness: {
+      description: "Global Radix UI brightness theme",
+      defaultValue: "dark",
       toolbar: {
         title: "Theme",
         icon: "lightning",
-        items: ["light", "dark"],
+        items: ["dark", "light"],
         dynamicTitle: true,
       },
     },
     color: {
       name: "Color",
-      description: "Color theme for components",
+      description: "Global Radix UI color theme",
       defaultValue: "violet",
       toolbar: {
         icon: "paintbrush",
@@ -31,7 +28,7 @@ const preview: Preview = {
   },
   decorators: [
     (Story, context) => (
-      <html lang="en" className={context.globals.theme}>
+      <html lang="en" className={context.globals.brightness}>
         <Theme accentColor={context.globals.color}>
           <Story />
         </Theme>

@@ -2,8 +2,7 @@ import { Viewport } from "next";
 import Script from "next/script";
 import { Theme, Grid } from "@radix-ui/themes";
 import Header from "@/components/Header";
-import "the-new-css-reset/css/reset.css";
-import "@radix-ui/themes/styles.css";
+import "@/styles/globalStyles.css";
 
 interface RootLayoutProps {
   children: React.ReactNode;
